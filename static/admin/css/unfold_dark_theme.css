@@ -1,0 +1,468 @@
+/* ==========================================================================
+   AARAMAM AYURVEDA SANCTUARY - OBSIDIAN DARK THEME FOR DJANGO UNFOLD
+   Crafted to mirror the sleek, high-contrast dark dashboard aesthetic.
+   ========================================================================== */
+
+/* Root color variable overrides */
+:root {
+    --color-primary-50: oklch(98% .03 140);
+    --color-primary-100: oklch(95% .06 140);
+    --color-primary-200: oklch(90% .10 140);
+    --color-primary-300: oklch(84% .16 138);
+    --color-primary-400: oklch(78% .22 136);
+    --color-primary-500: oklch(72% .25 135); /* #84cc16 Electric Lime */
+    --color-primary-600: oklch(64% .24 135);
+    --color-primary-700: oklch(52% .20 135);
+    --color-primary-800: oklch(40% .16 135);
+    --color-primary-900: oklch(30% .12 135);
+    --color-primary-950: oklch(18% .08 135);
+
+    --color-base-50: oklch(98% .002 140);
+    --color-base-100: oklch(95% .003 140);
+    --color-base-200: oklch(89% .005 140);
+    --color-base-300: oklch(78% .008 140);
+    --color-base-400: oklch(62% .010 140);
+    --color-base-500: oklch(48% .012 140);
+    --color-base-600: oklch(35% .012 140);
+    --color-base-700: oklch(22% .010 140); /* #222824 border */
+    --color-base-800: oklch(16% .008 140); /* #181c19 elevated */
+    --color-base-900: oklch(11% .006 140); /* #121514 cards */
+    --color-base-950: oklch(6.5% .004 140); /* #0a0c0b pitch obsidian */
+}
+
+/* Base Body & App Background */
+html.dark,
+html.dark body {
+    background-color: #0a0c0b !important;
+    color: #e5e7eb !important;
+}
+
+/* Sidebar & Navigation */
+html.dark aside,
+html.dark [data-sidebar] {
+    background-color: #0c0f0d !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+html.dark header {
+    background-color: #0c0f0d !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Cards, Modules & Containers */
+html.dark .bg-base-900,
+html.dark .bg-white,
+html.dark [class*="bg-base-900"],
+html.dark .module,
+html.dark div.inline-group,
+html.dark fieldset.module {
+    background-color: #121514 !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+html.dark .bg-base-800 {
+    background-color: #181c19 !important;
+}
+
+/* Subtle Card Borders */
+html.dark .border-base-700,
+html.dark .border-base-800,
+html.dark .border-base-200,
+html.dark .border-base-300,
+html.dark hr {
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Clean Rounded Corners for Cards */
+html.dark .rounded-default {
+    border-radius: 0.65rem !important;
+}
+
+html.dark .rounded-lg,
+html.dark .rounded-xl {
+    border-radius: 0.85rem !important;
+}
+
+/* Card Shadow Effect */
+html.dark .shadow-xs,
+html.dark .shadow-sm,
+html.dark .shadow-md {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* High Contrast Crisp Typography */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark .text-font-important-dark {
+    color: #ffffff !important;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+html.dark .text-font-default-dark {
+    color: #e5e7eb !important;
+}
+
+html.dark .text-font-subtle-dark,
+html.dark .text-base-400 {
+    color: #9ca3af !important;
+}
+
+/* Electric Lime Primary Accents (Matches the waveform & donut chart) */
+html.dark .text-primary-600,
+html.dark .text-primary-500,
+html.dark a.text-primary-600,
+html.dark a.text-primary-500 {
+    color: #84cc16 !important;
+}
+
+/* Primary Action Buttons */
+html.dark .bg-primary-600,
+html.dark .bg-primary-500,
+html.dark button.bg-primary-600,
+html.dark a.bg-primary-600 {
+    background-color: #84cc16 !important;
+    color: #0a0c0b !important;
+    font-weight: 600 !important;
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(132, 204, 22, 0.3) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+html.dark .bg-primary-600:hover,
+html.dark .bg-primary-500:hover,
+html.dark button.bg-primary-600:hover,
+html.dark a.bg-primary-600:hover {
+    background-color: #a3e635 !important;
+    box-shadow: 0 4px 16px rgba(132, 204, 22, 0.45) !important;
+}
+
+/* Form Inputs, Selects & Textareas */
+html.dark input[type="text"],
+html.dark input[type="password"],
+html.dark input[type="email"],
+html.dark input[type="number"],
+html.dark input[type="tel"],
+html.dark input[type="url"],
+html.dark textarea,
+html.dark select {
+    background-color: #161a18 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 0.5rem !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+    border-color: #84cc16 !important;
+    outline: 2px solid rgba(132, 204, 22, 0.35) !important;
+    outline-offset: 0 !important;
+}
+
+/* Table Enhancements (Clean Dark Grid) */
+html.dark table {
+    background-color: #121514 !important;
+}
+
+html.dark table thead th {
+    background-color: #161917 !important;
+    color: #9ca3af !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    transition: background-color 0.15s ease;
+}
+
+html.dark table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Status Badges & Pills (Like the +14%, +12% pills in screenshot) */
+html.dark .bg-green-100,
+html.dark [class*="bg-green-500/20"],
+html.dark [class*="bg-emerald-500/20"] {
+    background-color: rgba(132, 204, 22, 0.12) !important;
+    color: #a3e635 !important;
+    border: 1px solid rgba(132, 204, 22, 0.28) !important;
+    font-weight: 600 !important;
+}
+
+html.dark .bg-blue-100,
+html.dark [class*="bg-blue-500/20"] {
+    background-color: rgba(59, 130, 246, 0.12) !important;
+    color: #60a5fa !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+html.dark .bg-orange-100,
+html.dark [class*="bg-orange-500/20"] {
+    background-color: rgba(249, 115, 22, 0.12) !important;
+    color: #fb923c !important;
+    border: 1px solid rgba(249, 115, 22, 0.25) !important;
+}
+
+html.dark .bg-red-100,
+html.dark [class*="bg-red-500/20"] {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+}
+
+/* Navigation Links in Sidebar */
+html.dark aside nav a {
+    color: #9ca3af !important;
+    transition: all 0.15s ease-in-out;
+}
+
+html.dark aside nav a:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+html.dark aside nav a[class*="bg-primary"],
+html.dark aside nav a.active {
+    background-color: rgba(132, 204, 22, 0.12) !important;
+    color: #a3e635 !important;
+    border-left: 3px solid #84cc16 !important;
+    font-weight: 600 !important;
+}
+
+/* Custom Sleek Scrollbar */
+html.dark ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+    background: #0a0c0b;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+    background: #232925;
+    border-radius: 9999px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #354039;
+}
+
+/* ==========================================================================
+   EXPANDED CARDS & PERMISSIONS SELECTOR SIZING
+   Enlarges permissions dual-list cards, shows full text without cutoff,
+   and increases selector list height from 6 items to 20+ items.
+   ========================================================================== */
+
+/* 1. Full-width containers and cards across the admin */
+#content.container,
+.change-form #content,
+.change-list #content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+#content-main,
+#content-main form,
+fieldset.module,
+.form-rows {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 2. Full-width field rows for permissions, groups, and inlines */
+.field-permissions,
+.field-user_permissions,
+.field-groups {
+    width: 100% !important;
+}
+
+.field-permissions > div:last-child,
+.field-user_permissions > div:last-child,
+.field-groups > div:last-child,
+.related-widget-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 3. Selector Dual-Box Container (Available & Chosen Cards) */
+.selector {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 1.5rem !important;
+    margin: 0.75rem 0 !important;
+}
+
+/* 4. Increase Card Width and Elevation */
+.selector-available,
+.selector-chosen {
+    flex: 1 1 0% !important;
+    min-width: 420px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+html.dark .selector-available,
+html.dark .selector-chosen {
+    background: #121514 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 5. Selector Headers & Titles */
+.selector-available h2,
+.selector-chosen h2,
+.selector .selector-available-title label,
+.selector .selector-chosen-title label {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    padding: 0.85rem 1.25rem !important;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(0, 0, 0, 0.02) !important;
+}
+
+html.dark .selector-available h2,
+html.dark .selector-chosen h2,
+html.dark .selector .selector-available-title label,
+html.dark .selector .selector-chosen-title label {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* 6. Selector Search Filter Input */
+.selector-filter {
+    padding: 0.75rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.dark .selector-filter {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.selector-filter input {
+    width: 100% !important;
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.5rem !important;
+    margin: 0 !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    background-color: #f9fafb !important;
+}
+
+html.dark .selector-filter input {
+    background-color: #181c19 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #e5e7eb !important;
+}
+
+/* 7. Large Height for the Select List (Shows 20+ Permissions At Once) */
+.selector select,
+.selector select[multiple] {
+    min-height: 480px !important;
+    height: 520px !important;
+    width: 100% !important;
+    padding: 0.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+}
+
+/* 8. Full-Text Legible Permission Options (No Truncation with ...) */
+.selector option {
+    padding: 0.5rem 0.85rem !important;
+    margin-bottom: 3px !important;
+    border-radius: 0.375rem !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-overflow: clip !important;
+    cursor: pointer !important;
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    color: #374151 !important;
+}
+
+html.dark .selector option {
+    color: #d1d5db !important;
+}
+
+.selector option:hover {
+    background-color: rgba(132, 204, 22, 0.12) !important;
+    color: #84cc16 !important;
+}
+
+.selector option:checked {
+    background-color: rgba(132, 204, 22, 0.22) !important;
+    color: #84cc16 !important;
+    font-weight: 600 !important;
+}
+
+/* 9. Center Transfer Buttons (Choose / Remove Arrows) */
+.selector-chooser {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0 0.5rem !important;
+    list-style: none !important;
+    margin: 0 !important;
+}
+
+.selector-chooser li {
+    margin: 0 !important;
+}
+
+/* 10. Footer Action Links (Choose all / Remove all) */
+.selector-chooseall,
+.selector-clearall {
+    display: block !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.825rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.15s ease !important;
+}
+
+html.dark .selector-chooseall,
+html.dark .selector-clearall {
+    border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.selector-chooseall:hover {
+    background-color: rgba(132, 204, 22, 0.1) !important;
+    color: #84cc16 !important;
+}
+
+.selector-clearall {
+    color: #ef4444 !important;
+}
+
+.selector-clearall:hover {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+}
