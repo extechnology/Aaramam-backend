@@ -25,6 +25,7 @@ ADMISSION_INQUIRY_COLUMNS = [
     ('ID', 'id', 8, 'center'),
     ('Applicant Name', 'name', 24, 'left'),
     ('Phone / WhatsApp', 'phone_number', 18, 'center'),
+    ('Email Address', 'email', 26, 'left'),
     ('Program / Treatment', lambda o: o.get_program_display() if hasattr(o, 'get_program_display') else o.program, 30, 'left'),
     ('Bystander Accommodation', lambda o: o.get_bystander_accommodation_display() if hasattr(o, 'get_bystander_accommodation_display') else o.bystander_accommodation, 26, 'left'),
     ('Requirements / Due Date', 'requirements_or_due_date', 36, 'left'),

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank you for your inquiry — Aaramam Ayurveda Sanctuary</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .email-wrapper {
+            width: 100%;
+            background-color: #f1f5f9;
+            padding: 30px 15px;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+            padding: 32px 30px;
+            text-align: center;
+            color: #ffffff;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0 0 6px 0;
+            color: #ffffff;
+        }
+        .header-subtitle {
+            font-size: 13px;
+            color: #a7f3d0;
+            margin: 0;
+            font-weight: 500;
+        }
+        .content-body {
+            padding: 32px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 12px 0;
+        }
+        .lead-text {
+            font-size: 14.5px;
+            color: #334155;
+            margin: 0 0 22px 0;
+            line-height: 1.65;
+        }
+        .summary-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #10b981;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+        .summary-title {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #065f46;
+            margin: 0 0 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 13.5px;
+        }
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .summary-label {
+            color: #64748b;
+            font-weight: 500;
+            width: 40%;
+        }
+        .summary-value {
+            color: #0f172a;
+            font-weight: 700;
+            width: 60%;
+            text-align: right;
+        }
+        .next-steps-card {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 26px;
+        }
+        .next-steps-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #166534;
+            margin: 0 0 8px 0;
+        }
+        .next-steps-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 13px;
+            color: #14532d;
+            line-height: 1.6;
+        }
+        .cta-container {
+            text-align: center;
+            margin: 28px 0;
+        }
+        .btn-whatsapp {
+            display: inline-block;
+            background-color: #25D366;
+            color: #ffffff !important;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+        }
+        .contact-footer-card {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            margin-top: 24px;
+            font-size: 12.5px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        .footer-note {
+            background-color: #f8fafc;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 11.5px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+            <!-- Header -->
+            <div class="header-banner">
+                <div class="header-title">Aaramam Ayurveda Sanctuary</div>
+                <div class="header-subtitle">Sanctuary of Gentle Healing, Motherhood &amp; Classical Care</div>
+            </div>
+
+            <!-- Body -->
+            <div class="content-body">
+                <div class="greeting">Namaskaram, {{ name }}!</div>
+                
+                <p class="lead-text">
+                    Thank you for reaching out to <strong>Aaramam Ayurveda Sanctuary</strong>. We have received your inquiry regarding <strong>{{ package_or_program_name }}</strong>. Our senior Ayurvedic physicians and maternal care coordinator desk are reviewing your details.
+                </p>
+
+                <!-- Inquiry Summary Card -->
+                <div class="summary-card">
+                    <div class="summary-title">Your Inquiry Summary</div>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">Inquiry Type:</span>
+                        <span class="summary-value">{{ inquiry_type_display }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Package / Program:</span>
+                        <span class="summary-value" style="color: #065f46;">{{ package_or_program_name }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Contact Phone:</span>
+                        <span class="summary-value">{{ phone_number }}</span>
+                    </div>
+
+                    {% if accommodation %}
+                    <div class="summary-row">
+                        <span class="summary-label">Accommodation:</span>
+                        <span class="summary-value">{{ accommodation }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if message_or_requirements %}
+                    <div class="summary-row">
+                        <span class="summary-label">Specific Notes:</span>
+                        <span class="summary-value" style="font-weight: 500; text-align: right;">{{ message_or_requirements }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="summary-row">
+                        <span class="summary-label">Submitted On:</span>
+                        <span class="summary-value" style="font-weight: 500; font-size: 12px; color: #64748b;">{{ submitted_at }}</span>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="next-steps-card">
+                    <div class="next-steps-title">What Happens Next?</div>
+                    <ul class="next-steps-list">
+                        <li>Our medical director reviews your program requirements and admission dates.</li>
+                        <li>A coordinator will connect with you via <strong>WhatsApp / Phone</strong> at <strong>{{ phone_number }}</strong> to discuss personalized dietary plans, doctor availability, and suite reservations.</li>
+                        <li>If you need immediate assistance or have urgent medical questions, click below to chat directly with our official WhatsApp desk.</li>
+                    </ul>
+                </div>
+
+                <!-- CTA Button -->
+                {% if whatsapp_url %}
+                <div class="cta-container">
+                    <a href="{{ whatsapp_url }}" target="_blank" class="btn-whatsapp">
+                        Chat Directly on WhatsApp &rarr;
+                    </a>
+                </div>
+                {% endif %}
+
+                <!-- Sanctuary Helpline & Center -->
+                <div class="contact-footer-card">
+                    <strong>Aaramam Prasavaraksha &amp; Ayurveda Sanctuary</strong><br>
+                    Near Govt Taluk Hospital (Chantha), Feroke, Kozhikode, Kerala 673631<br>
+                    Helpline / WhatsApp: <strong>+91 70346 41282</strong> &bull; Email: aaramcare@gmail.com<br>
+                    Operating Hours: Monday – Sunday (24/7 Dedicated In-House Nursing)
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-note">
+                &copy; {{ current_year }} Aaramam Ayurveda Sanctuary. All rights reserved.<br>
+                You are receiving this email because you submitted an inquiry on our official website.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

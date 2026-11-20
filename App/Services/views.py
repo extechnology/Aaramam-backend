@@ -3,6 +3,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from App.common.emails import dispatch_inquiry_emails
 from .models import Service, ServiceCategory, ServiceInquiry
 from .serializers import (
     ServiceCategorySerializer,
@@ -111,7 +112,8 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
         serializer = ServiceInquirySerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            inquiry = serializer.save()
+            dispatch_inquiry_emails(inquiry)
             return Response(
                 {
                     'message': f'Inquiry for "{service.title}" submitted successfully!',
@@ -134,3 +136,7 @@ class ServiceInquiryViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
+
+    def perform_create(self, serializer):
+        inquiry = serializer.save()
+        dispatch_inquiry_emails(inquiry)

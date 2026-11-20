@@ -51,6 +51,7 @@ class AdmissionInquirySerializer(serializers.ModelSerializer):
             'id',
             'name',
             'phone_number',
+            'email',
             'program',
             'program_display',
             'bystander_accommodation',

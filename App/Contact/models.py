@@ -108,6 +108,12 @@ class AdmissionInquiry(models.Model):
 
     name = models.CharField(_('your name'), max_length=150)
     phone_number = models.CharField(_('phone / WhatsApp number'), max_length=30)
+    email = models.EmailField(
+        _('email address'),
+        blank=True,
+        null=True,
+        help_text=_('Email address for receiving confirmation and doctor consultation notes')
+    )
     program = models.CharField(_('program / treatment'), max_length=100, choices=PROGRAM_CHOICES, default='postnatal')
     bystander_accommodation = models.CharField(
         _('bystander accommodation'),

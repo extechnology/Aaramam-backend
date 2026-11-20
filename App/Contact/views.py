@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from App.common.emails import dispatch_inquiry_emails
 from .models import AdmissionInquiry, SanctuaryContactInfo
 from .serializers import AdmissionInquirySerializer, SanctuaryContactInfoSerializer
 
@@ -71,6 +72,7 @@ class AdmissionInquiryViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         inquiry = serializer.save()
+        dispatch_inquiry_emails(inquiry)
 
         whatsapp_url = inquiry.get_whatsapp_url()
 

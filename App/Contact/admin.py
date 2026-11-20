@@ -78,7 +78,7 @@ class AdmissionInquiryAdmin(ModelAdmin):
         'created_at',
     )
     list_editable = ('status',)
-    search_fields = ('name', 'phone_number', 'requirements_or_due_date', 'notes')
+    search_fields = ('name', 'phone_number', 'email', 'requirements_or_due_date', 'notes')
     readonly_fields = ('created_at', 'display_whatsapp_button')
     ordering = ('-created_at',)
     actions_list = ['export_all_excel', 'export_all_csv']
@@ -106,7 +106,7 @@ class AdmissionInquiryAdmin(ModelAdmin):
         (
             _('Applicant Details'),
             {
-                'fields': ('name', 'phone_number', 'display_whatsapp_button'),
+                'fields': ('name', 'phone_number', 'email', 'display_whatsapp_button'),
             },
         ),
         (
@@ -125,7 +125,8 @@ class AdmissionInquiryAdmin(ModelAdmin):
 
     @display(description=_('Applicant'), header=True)
     def display_applicant(self, instance):
-        return [instance.name, instance.phone_number]
+        contact_line = f"{instance.phone_number} • {instance.email}" if instance.email else instance.phone_number
+        return [instance.name, contact_line]
 
     @display(description=_('Program / Therapy'), label=True)
     def display_program(self, instance):

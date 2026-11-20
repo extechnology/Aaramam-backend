@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2_q1z8wl2=#j&245e4#1qq6w8tzow&o5hys^@z1rtw@ys#s07q'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-2_q1z8wl2=#j&245e4#1qq6w8tzow&o5hys^@z1rtw@ys#s07q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 
 # Application definition
@@ -116,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/kolkata'
 
 USE_I18N = True
 
@@ -142,14 +144,18 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 ]
 
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+# Email Configuration
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='aaramcare@gmail.com')
+_raw_email_pw = config('EMAIL_HOST_PASSWORD', default=config('APP_PASSWOERD', default=''))
+EMAIL_HOST_PASSWORD = _raw_email_pw.replace(' ', '')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=f'"Aaramam Ayurveda Sanctuary" <{EMAIL_HOST_USER}>')
+COMPANY_NOTIFICATION_EMAIL = config('COMPANY_NOTIFICATION_EMAIL', default='aaramcare@gmail.com')
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_TIMEOUT = config('EMAIL_TIMEOUT', default=10, cast=int)
 
 # Custom User Model
 AUTH_USER_MODEL = 'Authentication.User'
