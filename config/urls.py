@@ -17,9 +17,21 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
+from App.common.views import (
+    export_admission_inquiries_view,
+    export_guest_feedback_view,
+    export_service_inquiries_view,
+)
+
 urlpatterns = [
+    # Export endpoints for Excel (.xlsx) and CSV
+    path('admin/export/service-inquiries/<str:format>/', export_service_inquiries_view, name='export-service-inquiries'),
+    path('admin/export/admission-inquiries/<str:format>/', export_admission_inquiries_view, name='export-admission-inquiries'),
+    path('admin/export/guest-submissions/<str:format>/', export_guest_feedback_view, name='export-guest-submissions'),
+
     path('admin/', admin.site.urls),
     path('api/services/', include('App.Services.urls')),
     path('api/feedback/', include('App.Feedback.urls')),
@@ -29,4 +41,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
 

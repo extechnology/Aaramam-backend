@@ -1,0 +1,882 @@
+{% extends 'admin/base.html' %}
+
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="{% static 'admin/css/dashboard_stats.css' %}?v=1.2" />
+    <style>
+        /* Inlined Critical Styles for Immediate Browser Rendering */
+        .sanctuary-hero-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 45%, #047857 100%) !important;
+            border: 1px solid rgba(52, 211, 153, 0.35) !important;
+            border-radius: 1rem !important;
+            padding: 1.75rem 2rem !important;
+            color: #ffffff !important;
+            box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.25) !important;
+        }
+        html.dark .sanctuary-hero-banner {
+            background: linear-gradient(135deg, #09261e 0%, #0d3429 50%, #092019 100%) !important;
+            border: 1px solid rgba(52, 211, 153, 0.25) !important;
+        }
+        .hero-live-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            padding: 0.25rem 0.75rem !important;
+            border-radius: 9999px !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            background: rgba(16, 185, 129, 0.25) !important;
+            border: 1px solid rgba(110, 231, 183, 0.4) !important;
+            color: #a7f3d0 !important;
+        }
+        .hero-pulse-dot {
+            width: 0.5rem !important;
+            height: 0.5rem !important;
+            border-radius: 9999px !important;
+            background-color: #34d399 !important;
+            box-shadow: 0 0 8px #34d399 !important;
+        }
+        .hero-btn-gold {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            padding: 0.625rem 1.125rem !important;
+            border-radius: 0.5rem !important;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: #ffffff !important;
+            font-size: 0.8125rem !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.45) !important;
+            border: 1px solid rgba(253, 230, 138, 0.3) !important;
+        }
+        .hero-btn-translucent {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            padding: 0.625rem 1.125rem !important;
+            border-radius: 0.5rem !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            font-size: 0.8125rem !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(8px) !important;
+        }
+        .kpi-stat-card {
+            border-radius: 0.875rem !important;
+            padding: 1.35rem 1.5rem !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+        }
+        html.dark .kpi-stat-card {
+            background: #121514 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .kpi-card-emerald { border-top: 4px solid #10b981 !important; }
+        html:not(.dark) .kpi-card-emerald { background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 35%) !important; border-color: #bbf7d0 !important; }
+        .kpi-card-cyan { border-top: 4px solid #06b6d4 !important; }
+        html:not(.dark) .kpi-card-cyan { background: linear-gradient(180deg, #ecfeff 0%, #ffffff 35%) !important; border-color: #a5f3fc !important; }
+        .kpi-card-indigo { border-top: 4px solid #6366f1 !important; }
+        html:not(.dark) .kpi-card-indigo { background: linear-gradient(180deg, #eef2ff 0%, #ffffff 35%) !important; border-color: #c7d2fe !important; }
+        .kpi-card-amber { border-top: 4px solid #f59e0b !important; }
+        html:not(.dark) .kpi-card-amber { background: linear-gradient(180deg, #fffbeb 0%, #ffffff 35%) !important; border-color: #fde68a !important; }
+
+        .kpi-icon-emerald { background: #dcfce7 !important; color: #059669 !important; border: 1px solid #86efac !important; }
+        html.dark .kpi-icon-emerald { background: rgba(16, 185, 129, 0.18) !important; color: #34d399 !important; border-color: rgba(16, 185, 129, 0.35) !important; }
+        .kpi-icon-cyan { background: #cffafe !important; color: #0891b2 !important; border: 1px solid #67e8f9 !important; }
+        html.dark .kpi-icon-cyan { background: rgba(6, 182, 212, 0.18) !important; color: #22d3ee !important; border-color: rgba(6, 182, 212, 0.35) !important; }
+        .kpi-icon-indigo { background: #e0e7ff !important; color: #4338ca !important; border: 1px solid #a5b4fc !important; }
+        html.dark .kpi-icon-indigo { background: rgba(99, 102, 241, 0.18) !important; color: #818cf8 !important; border-color: rgba(99, 102, 241, 0.35) !important; }
+        .kpi-icon-amber { background: #fef3c7 !important; color: #d97706 !important; border: 1px solid #fcd34d !important; }
+        html.dark .kpi-icon-amber { background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; border-color: rgba(245, 158, 11, 0.35) !important; }
+
+        .kpi-stat-number { font-size: 2.25rem !important; font-weight: 800 !important; line-height: 1.1 !important; color: #0f172a !important; }
+        html.dark .kpi-stat-number { color: #ffffff !important; }
+        .kpi-title-text { font-size: 0.75rem !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; }
+
+        .badge-action-needed { display: inline-flex !important; align-items: center !important; gap: 0.375rem !important; padding: 0.25rem 0.625rem !important; border-radius: 0.375rem !important; font-size: 0.75rem !important; font-weight: 700 !important; background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; }
+        html.dark .badge-action-needed { background: rgba(245, 158, 11, 0.2) !important; color: #fbbf24 !important; border-color: rgba(245, 158, 11, 0.35) !important; }
+        .badge-conversion-rate { display: inline-flex !important; align-items: center !important; gap: 0.25rem !important; padding: 0.25rem 0.625rem !important; border-radius: 0.375rem !important; font-size: 0.75rem !important; font-weight: 700 !important; background: #ecfdf5 !important; color: #059669 !important; border: 1px solid #a7f3d0 !important; }
+        html.dark .badge-conversion-rate { background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; border-color: rgba(16, 185, 129, 0.35) !important; }
+        .badge-admission-rate { display: inline-flex !important; align-items: center !important; gap: 0.25rem !important; padding: 0.25rem 0.625rem !important; border-radius: 0.375rem !important; font-size: 0.75rem !important; font-weight: 700 !important; background: #eff6ff !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; }
+        html.dark .badge-admission-rate { background: rgba(59, 130, 246, 0.2) !important; color: #60a5fa !important; border-color: rgba(59, 130, 246, 0.35) !important; }
+        .badge-satisfaction-score { display: inline-flex !important; align-items: center !important; gap: 0.25rem !important; padding: 0.25rem 0.625rem !important; border-radius: 0.375rem !important; font-size: 0.75rem !important; font-weight: 700 !important; background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; }
+        html.dark .badge-satisfaction-score { background: rgba(245, 158, 11, 0.2) !important; color: #fbbf24 !important; border-color: rgba(245, 158, 11, 0.35) !important; }
+
+        .btn-export-excel { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.45rem !important; padding: 0.55rem 0.85rem !important; border-radius: 0.5rem !important; background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; color: #ffffff !important; font-size: 0.75rem !important; font-weight: 700 !important; text-decoration: none !important; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3) !important; border: 1px solid rgba(167, 243, 208, 0.3) !important; flex: 1 !important; }
+        .btn-export-csv { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 0.45rem !important; padding: 0.55rem 0.85rem !important; border-radius: 0.5rem !important; background: #f8fafc !important; color: #1e293b !important; font-size: 0.75rem !important; font-weight: 700 !important; text-decoration: none !important; border: 1px solid #cbd5e1 !important; flex: 1 !important; }
+        html.dark .btn-export-csv { background: #1e2220 !important; color: #e2e8f0 !important; border-color: rgba(255, 255, 255, 0.12) !important; }
+
+        .progress-track { height: 0.55rem !important; border-radius: 9999px !important; background: #f1f5f9 !important; overflow: hidden !important; }
+        html.dark .progress-track { background: #1e2220 !important; }
+        .progress-fill-amber { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%) !important; }
+        .progress-fill-sky { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%) !important; }
+        .progress-fill-indigo { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%) !important; }
+        .progress-fill-emerald { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #059669 0%, #34d399 100%) !important; }
+        .progress-fill-slate { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #64748b 0%, #94a3b8 100%) !important; }
+        .progress-fill-gold { height: 100% !important; border-radius: 9999px !important; background: linear-gradient(90deg, #f59e0b 0%, #fde047 100%) !important; }
+
+        .status-pill-new { background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; font-size: 0.6875rem !important; font-weight: 700 !important; padding: 0.15rem 0.5rem !important; border-radius: 0.375rem !important; }
+        .status-pill-contacted { background: #e0f2fe !important; color: #0369a1 !important; border: 1px solid #bae6fd !important; font-size: 0.6875rem !important; font-weight: 700 !important; padding: 0.15rem 0.5rem !important; border-radius: 0.375rem !important; }
+        .status-pill-scheduled { background: #ede9fe !important; color: #6d28d9 !important; border: 1px solid #ddd6fe !important; font-size: 0.6875rem !important; font-weight: 700 !important; padding: 0.15rem 0.5rem !important; border-radius: 0.375rem !important; }
+        .status-pill-converted, .status-pill-admitted { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; font-size: 0.6875rem !important; font-weight: 700 !important; padding: 0.15rem 0.5rem !important; border-radius: 0.375rem !important; }
+        .status-pill-closed { background: #f1f5f9 !important; color: #475569 !important; border: 1px solid #cbd5e1 !important; font-size: 0.6875rem !important; font-weight: 700 !important; padding: 0.15rem 0.5rem !important; border-radius: 0.375rem !important; }
+
+        .btn-whatsapp-chat { display: inline-flex !important; align-items: center !important; gap: 0.3rem !important; padding: 0.3rem 0.65rem !important; border-radius: 0.375rem !important; background: #25D366 !important; color: #ffffff !important; font-size: 0.6875rem !important; font-weight: 700 !important; text-decoration: none !important; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col gap-6 w-full">
+
+    <!-- ===================================================================== -->
+    <!-- 1. EXECUTIVE WELCOME & OVERVIEW BANNER                                -->
+    <!-- ===================================================================== -->
+    <div class="sanctuary-hero-banner">
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 shadow-inner">
+                    <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="hero-live-pill">
+                            <span class="hero-pulse-dot"></span>
+                            Live Sanctuary Desk
+                        </span>
+                        <span class="text-xs text-white/80 font-medium">
+                            {% now "l, d F Y" %}
+                        </span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white m-0">
+                        Sanctuary Overview &amp; Analytics
+                    </h1>
+                    <p class="text-xs md:text-sm text-white/85 mt-1 m-0">
+                        Real-time inquiry conversion funnels, doctor appointments, guest reviews &amp; one-click exports.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="flex flex-wrap items-center gap-3">
+                <a href="#quick-export-section" class="hero-btn-gold">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Download Data (.xlsx / .csv)</span>
+                </a>
+                <a href="{% url 'admin:Services_serviceinquiry_changelist' %}" class="hero-btn-translucent">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <span>View All Inquiries</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===================================================================== -->
+    <!-- 2. HIGH-LEVEL KPI METRIC CARDS (COLOR ENRICHED)                       -->
+    <!-- ===================================================================== -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- CARD 1: Total Leads & Inquiries (Emerald Theme) -->
+        <div class="kpi-stat-card kpi-card-emerald">
+            <div class="flex items-center justify-between">
+                <span class="kpi-title-text text-emerald-800 dark:text-emerald-400">Total Inquiries</span>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center kpi-icon-emerald">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-6l-2 3h-4l-2-3H2"></path>
+                        <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="kpi-stat-number text-emerald-950 dark:text-white">
+                    {{ analytics.total_leads_all|default:0 }}
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="badge-action-needed">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        {{ analytics.new_leads_pending|default:0 }} Action Needed
+                    </span>
+                    <span class="text-xs text-font-subtle-light dark:text-font-subtle-dark font-medium">New Leads</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-emerald-100 dark:border-base-800 text-[11px] text-font-subtle-light dark:text-font-subtle-dark flex justify-between font-medium">
+                <span>Packages + Admissions</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">● Live DB</span>
+            </div>
+        </div>
+
+        <!-- CARD 2: Package Inquiries (Cyan / Teal Theme) -->
+        <div class="kpi-stat-card kpi-card-cyan">
+            <div class="flex items-center justify-between">
+                <span class="kpi-title-text text-cyan-800 dark:text-cyan-400">Package Enquiries</span>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center kpi-icon-cyan">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a9 9 0 0 1 9 9c0 5-4 9-9 9s-9-4-9-9a9 9 0 0 1 9-9z"></path>
+                        <path d="M12 7c-2 2-3 4-3 6a3 3 0 0 0 6 0c0-2-1-4-3-6z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="kpi-stat-number text-cyan-950 dark:text-white">
+                    {{ analytics.service_inquiries.total|default:0 }}
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="badge-conversion-rate">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        {{ analytics.service_inquiries.conversion_rate|default:0 }}%
+                    </span>
+                    <span class="text-xs text-font-subtle-light dark:text-font-subtle-dark font-medium">Conversion Rate</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-cyan-100 dark:border-base-800 text-[11px] text-font-subtle-light dark:text-font-subtle-dark flex justify-between font-medium">
+                <span class="font-semibold text-cyan-700 dark:text-cyan-400">{{ analytics.service_inquiries.converted|default:0 }} Converted</span>
+                <span>{{ analytics.service_inquiries.recent_7d|default:0 }} past 7 days</span>
+            </div>
+        </div>
+
+        <!-- CARD 3: Admissions & Doctor Consultations (Indigo / Sapphire Theme) -->
+        <div class="kpi-stat-card kpi-card-indigo">
+            <div class="flex items-center justify-between">
+                <span class="kpi-title-text text-indigo-800 dark:text-indigo-400">Admissions &amp; Doctors</span>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center kpi-icon-indigo">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.5 3h15M12 3v7a4 4 0 0 1-8 0V3m16 0v7a8 8 0 0 1-8 8"></path>
+                        <circle cx="20" cy="19" r="2"></circle>
+                        <path d="M18 19h-2a2 2 0 0 1-2-2v-1"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="kpi-stat-number text-indigo-950 dark:text-white">
+                    {{ analytics.admission_inquiries.total|default:0 }}
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="badge-admission-rate">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <polyline points="9 16 11 18 15 14"></polyline>
+                        </svg>
+                        {{ analytics.admission_inquiries.conversion_rate|default:0 }}%
+                    </span>
+                    <span class="text-xs text-font-subtle-light dark:text-font-subtle-dark font-medium">Scheduled / Admitted</span>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-indigo-100 dark:border-base-800 text-[11px] text-font-subtle-light dark:text-font-subtle-dark flex justify-between font-medium">
+                <span class="font-semibold text-indigo-700 dark:text-indigo-400">{{ analytics.admission_inquiries.admitted|default:0 }} Inpatient</span>
+                <span>{{ analytics.admission_inquiries.scheduled|default:0 }} Scheduled</span>
+            </div>
+        </div>
+
+        <!-- CARD 4: Guest Satisfaction (Golden Amber Theme) -->
+        <div class="kpi-stat-card kpi-card-amber">
+            <div class="flex items-center justify-between">
+                <span class="kpi-title-text text-amber-800 dark:text-amber-400">Guest Satisfaction</span>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center kpi-icon-amber">
+                    <svg class="w-5 h-5 fill-amber-500 stroke-amber-600" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="flex items-baseline gap-2">
+                    <span class="kpi-stat-number text-amber-950 dark:text-white">
+                        {{ analytics.feedback.avg_rating|default:"5.0" }}
+                    </span>
+                    <span class="text-amber-500 text-lg font-bold tracking-tight">★★★★★</span>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="badge-satisfaction-score">
+                        {{ analytics.feedback.approved|default:0 }} Approved
+                    </span>
+                    {% if analytics.feedback.pending > 0 %}
+                    <span class="badge-action-needed">
+                        {{ analytics.feedback.pending }} Pending
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-amber-100 dark:border-base-800 text-[11px] text-font-subtle-light dark:text-font-subtle-dark flex justify-between font-medium">
+                <span>{{ analytics.feedback.total|default:0 }} Submissions</span>
+                <span class="font-bold text-amber-600 dark:text-amber-400">Reviews</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================================== -->
+    <!-- 3. QUICK EXPORT CENTER (EXCEL & CSV DOWNLOADS)                        -->
+    <!-- ===================================================================== -->
+    <div id="quick-export-section" class="rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 p-6 shadow-xs">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-base-800">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white m-0">
+                            Data Export Center
+                        </h2>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/30">
+                            Instant Download
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 m-0">
+                        Download full lead databases, consultation inquiries, and guest feedback formatted with custom headers, colors, and timestamps.
+                    </p>
+                </div>
+            </div>
+            <div class="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800/60">
+                    <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    UTF-8 Encoded (Excel &amp; Sheets Ready)
+                </span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+
+            <!-- Card 1: Package Inquiries Export -->
+            <div class="export-card border-t-2 border-t-emerald-500">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2a9 9 0 0 1 9 9c0 5-4 9-9 9s-9-4-9-9a9 9 0 0 1 9-9z"></path>
+                                    <path d="M12 7c-2 2-3 4-3 6a3 3 0 0 0 6 0c0-2-1-4-3-6z"></path>
+                                </svg>
+                            </span>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white m-0">
+                                Package Enquiries
+                            </h3>
+                        </div>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">
+                            {{ analytics.service_inquiries.total|default:0 }} rows
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
+                        Submissions from package &lsquo;Enquire Now&rsquo; modals with applicant contact details, package name, status, and message.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 mt-5 pt-3 border-t border-slate-100 dark:border-base-800">
+                    <a href="{% url 'export-service-inquiries' 'excel' %}" class="btn-export-excel">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="8" y1="13" x2="16" y2="13"></line>
+                            <line x1="8" y1="17" x2="16" y2="17"></line>
+                        </svg>
+                        <span>Excel (.xlsx)</span>
+                    </a>
+                    <a href="{% url 'export-service-inquiries' 'csv' %}" class="btn-export-csv">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>CSV (.csv)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Admission Inquiries Export -->
+            <div class="export-card border-t-2 border-t-indigo-500">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-400">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4.5 3h15M12 3v7a4 4 0 0 1-8 0V3m16 0v7a8 8 0 0 1-8 8"></path>
+                                    <circle cx="20" cy="19" r="2"></circle>
+                                    <path d="M18 19h-2a2 2 0 0 1-2-2v-1"></path>
+                                </svg>
+                            </span>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white m-0">
+                                Admission Enquiries
+                            </h3>
+                        </div>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-800">
+                            {{ analytics.admission_inquiries.total|default:0 }} rows
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
+                        Inpatient admission requests, bystander accommodation choices, due dates, phone contacts, and doctor internal notes.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 mt-5 pt-3 border-t border-slate-100 dark:border-base-800">
+                    <a href="{% url 'export-admission-inquiries' 'excel' %}" class="btn-export-excel">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="8" y1="13" x2="16" y2="13"></line>
+                            <line x1="8" y1="17" x2="16" y2="17"></line>
+                        </svg>
+                        <span>Excel (.xlsx)</span>
+                    </a>
+                    <a href="{% url 'export-admission-inquiries' 'csv' %}" class="btn-export-csv">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>CSV (.csv)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Guest Feedback Export -->
+            <div class="export-card border-t-2 border-t-amber-500">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400">
+                                <svg class="w-4 h-4 fill-amber-500 stroke-amber-600" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </span>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white m-0">
+                                Guest Submissions
+                            </h3>
+                        </div>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-300 dark:border-amber-800">
+                            {{ analytics.feedback.total|default:0 }} rows
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
+                        Guest testimonials, therapy feedback, 1-5 star ratings, contact information, and review approval flags.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 mt-5 pt-3 border-t border-slate-100 dark:border-base-800">
+                    <a href="{% url 'export-guest-submissions' 'excel' %}" class="btn-export-excel">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="8" y1="13" x2="16" y2="13"></line>
+                            <line x1="8" y1="17" x2="16" y2="17"></line>
+                        </svg>
+                        <span>Excel (.xlsx)</span>
+                    </a>
+                    <a href="{% url 'export-guest-submissions' 'csv' %}" class="btn-export-csv">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>CSV (.csv)</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================================================================== -->
+    <!-- 4. VISUAL PIPELINE FUNNELS & SATISFACTION BREAKDOWN                    -->
+    <!-- ===================================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Left: Inquiry Status Pipelines -->
+        <div class="rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-base-800">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white m-0">
+                            Inquiry Conversion Pipelines
+                        </h2>
+                    </div>
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                        Lead Velocity
+                    </span>
+                </div>
+
+                <!-- Package Funnel -->
+                <div class="mt-5">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Package Enquiries Funnel
+                        </span>
+                        <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">
+                            {{ analytics.service_inquiries.conversion_rate }}% Converted
+                        </span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- New -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">New Leads</span>
+                                <span class="font-bold text-amber-600 dark:text-amber-400">{{ analytics.service_inquiries.new }} ({{ analytics.service_inquiries.new_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-amber" style="width: {{ analytics.service_inquiries.new_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Contacted -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Contacted</span>
+                                <span class="font-bold text-sky-600 dark:text-sky-400">{{ analytics.service_inquiries.contacted }} ({{ analytics.service_inquiries.contacted_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-sky" style="width: {{ analytics.service_inquiries.contacted_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Converted -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Converted / Booked</span>
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ analytics.service_inquiries.converted }} ({{ analytics.service_inquiries.converted_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-emerald" style="width: {{ analytics.service_inquiries.converted_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Closed -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Closed</span>
+                                <span class="font-bold text-slate-500">{{ analytics.service_inquiries.closed }} ({{ analytics.service_inquiries.closed_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-slate" style="width: {{ analytics.service_inquiries.closed_pct }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admission Funnel -->
+                <div class="mt-6 pt-5 border-t border-slate-100 dark:border-base-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            Admission &amp; Doctor Funnel
+                        </span>
+                        <span class="text-xs font-extrabold text-indigo-600 dark:text-indigo-400">
+                            {{ analytics.admission_inquiries.conversion_rate }}% Success
+                        </span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- New -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">New Inquiries</span>
+                                <span class="font-bold text-amber-600 dark:text-amber-400">{{ analytics.admission_inquiries.new }} ({{ analytics.admission_inquiries.new_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-amber" style="width: {{ analytics.admission_inquiries.new_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Contacted -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Doctor Desk Contacted</span>
+                                <span class="font-bold text-sky-600 dark:text-sky-400">{{ analytics.admission_inquiries.contacted }} ({{ analytics.admission_inquiries.contacted_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-sky" style="width: {{ analytics.admission_inquiries.contacted_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Scheduled -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Consultation Scheduled</span>
+                                <span class="font-bold text-indigo-600 dark:text-indigo-400">{{ analytics.admission_inquiries.scheduled }} ({{ analytics.admission_inquiries.scheduled_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-indigo" style="width: {{ analytics.admission_inquiries.scheduled_pct }}%;"></div>
+                            </div>
+                        </div>
+                        <!-- Admitted -->
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-600 dark:text-slate-400">Admitted to Sanctuary</span>
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ analytics.admission_inquiries.admitted }} ({{ analytics.admission_inquiries.admitted_pct }}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill-emerald" style="width: {{ analytics.admission_inquiries.admitted_pct }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-base-800 flex items-center justify-between text-xs">
+                <span class="text-slate-500 dark:text-slate-400 font-medium">Full status audit history recorded</span>
+                <a href="{% url 'admin:Contact_admissioninquiry_changelist' %}" class="text-emerald-600 dark:text-emerald-400 hover:underline font-bold inline-flex items-center gap-1">
+                    Manage Inquiries &rarr;
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: Guest Rating Breakdown & Sanctuary Highlights -->
+        <div class="rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-base-800">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white m-0">
+                            Guest Satisfaction Breakdown
+                        </h2>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                        {{ analytics.feedback.avg_rating }} Average Score
+                    </span>
+                </div>
+
+                <!-- Star Rating Distribution -->
+                <div class="mt-5 space-y-3">
+                    {% for star, data in analytics.feedback.ratings.items %}
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-bold text-amber-500 flex items-center gap-1">
+                                {% if star == 5 %}★★★★★
+                                {% elif star == 4 %}★★★★☆
+                                {% elif star == 3 %}★★★☆☆
+                                {% elif star == 2 %}★★☆☆☆
+                                {% else %}★☆☆☆☆
+                                {% endif %}
+                                <span class="text-slate-500 dark:text-slate-400 font-medium">({{ star }} Star)</span>
+                            </span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ data.count }} ({{ data.percent }}%)</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill-gold" style="width: {{ data.percent }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Sanctuary Offering Metrics -->
+                <div class="mt-6 pt-5 border-t border-slate-100 dark:border-base-800">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 m-0">
+                        Sanctuary Offerings &amp; Catalog Status
+                    </h3>
+                    <div class="grid grid-cols-3 gap-3 text-center mt-2">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-base-950 border border-slate-200 dark:border-base-800">
+                            <div class="text-2xl font-black text-emerald-700 dark:text-emerald-400">
+                                {{ analytics.catalog.total_services }}
+                            </div>
+                            <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mt-0.5">
+                                Active Packages
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-base-950 border border-slate-200 dark:border-base-800">
+                            <div class="text-2xl font-black text-cyan-700 dark:text-cyan-400">
+                                {{ analytics.catalog.total_categories }}
+                            </div>
+                            <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mt-0.5">
+                                Categories
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-base-950 border border-slate-200 dark:border-base-800">
+                            <div class="text-2xl font-black text-amber-600 dark:text-amber-400">
+                                {{ analytics.catalog.total_testimonials }}
+                            </div>
+                            <div class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mt-0.5">
+                                Reviews Published
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-base-800 flex items-center justify-between text-xs">
+                <span class="text-slate-500 dark:text-slate-400 font-medium">{{ analytics.feedback.pending }} submissions awaiting verification</span>
+                <a href="{% url 'admin:Feedback_guestfeedbacksubmission_changelist' %}" class="text-emerald-600 dark:text-emerald-400 hover:underline font-bold inline-flex items-center gap-1">
+                    Review Submissions &rarr;
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================================== -->
+    <!-- 5. RECENT INQUIRIES & SUBMISSIONS FEED                                -->
+    <!-- ===================================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Recent Package Inquiries -->
+        <div class="rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 shadow-xs overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-base-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white m-0">
+                        Recent Package Enquiries
+                    </h3>
+                </div>
+                <a href="{% url 'admin:Services_serviceinquiry_changelist' %}" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-bold">
+                    View all ({{ analytics.service_inquiries.total }}) &rarr;
+                </a>
+            </div>
+
+            <div class="divide-y divide-slate-100 dark:divide-base-800">
+                {% if analytics.recent_service_inquiries %}
+                    {% for inq in analytics.recent_service_inquiries %}
+                    <div class="p-4 hover:bg-slate-50/80 dark:hover:bg-base-800/40 transition-colors flex items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <a href="{% url 'admin:Services_serviceinquiry_change' inq.id %}" class="font-bold text-xs text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline truncate">
+                                    {{ inq.name }}
+                                </a>
+                                {% if inq.status == 'new' %}
+                                <span class="status-pill-new">New</span>
+                                {% elif inq.status == 'contacted' %}
+                                <span class="status-pill-contacted">Contacted</span>
+                                {% elif inq.status == 'converted' %}
+                                <span class="status-pill-converted">Converted</span>
+                                {% else %}
+                                <span class="status-pill-closed">Closed</span>
+                                {% endif %}
+                            </div>
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5 font-medium">
+                                {{ inq.service.title|default:"General Package" }} &bull; {{ inq.phone_number }}
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <div class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                                {{ inq.created_at|date:"M d, H:i" }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-6 text-center text-xs text-slate-400 dark:text-slate-500">
+                        No package inquiries recorded yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Admission Inquiries -->
+        <div class="rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 shadow-xs overflow-hidden">
+            <div class="p-5 border-b border-slate-100 dark:border-base-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white m-0">
+                        Recent Admission Inquiries
+                    </h3>
+                </div>
+                <a href="{% url 'admin:Contact_admissioninquiry_changelist' %}" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-bold">
+                    View all ({{ analytics.admission_inquiries.total }}) &rarr;
+                </a>
+            </div>
+
+            <div class="divide-y divide-slate-100 dark:divide-base-800">
+                {% if analytics.recent_admission_inquiries %}
+                    {% for adm in analytics.recent_admission_inquiries %}
+                    <div class="p-4 hover:bg-slate-50/80 dark:hover:bg-base-800/40 transition-colors flex items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <a href="{% url 'admin:Contact_admissioninquiry_change' adm.id %}" class="font-bold text-xs text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline truncate">
+                                    {{ adm.name }}
+                                </a>
+                                {% if adm.status == 'new' %}
+                                <span class="status-pill-new">New</span>
+                                {% elif adm.status == 'contacted' %}
+                                <span class="status-pill-contacted">Contacted</span>
+                                {% elif adm.status == 'scheduled' %}
+                                <span class="status-pill-scheduled">Scheduled</span>
+                                {% elif adm.status == 'admitted' %}
+                                <span class="status-pill-admitted">Admitted</span>
+                                {% else %}
+                                <span class="status-pill-closed">Closed</span>
+                                {% endif %}
+                            </div>
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5 font-medium">
+                                {{ adm.get_program_display }} &bull; {{ adm.phone_number }}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <a href="{{ adm.get_whatsapp_url }}" target="_blank" class="btn-whatsapp-chat" title="Chat on WhatsApp">
+                                <svg class="w-3.5 h-3.5 fill-white" viewBox="0 0 24 24">
+                                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+                                </svg>
+                                <span>WhatsApp</span>
+                            </a>
+                            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                                {{ adm.created_at|date:"M d, H:i" }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-6 text-center text-xs text-slate-400 dark:text-slate-500">
+                        No admission inquiries recorded yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================================== -->
+    <!-- 6. STANDARD UNFOLD APPLICATIONS & AUDIT HISTORY                       -->
+    <!-- ===================================================================== -->
+    <div class="mt-4 pt-6 border-t border-slate-200 dark:border-base-800">
+        <details class="group rounded-xl bg-white dark:bg-base-900 border border-slate-200 dark:border-base-800 shadow-xs" open>
+            <summary class="p-5 cursor-pointer font-bold text-sm text-slate-800 dark:text-white flex items-center justify-between select-none hover:bg-slate-50 dark:hover:bg-base-800/50 rounded-xl transition-colors">
+                <span class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span>All Applications &amp; Database Tables</span>
+                </span>
+                <span class="text-xs text-slate-400 font-normal">Click to toggle</span>
+            </summary>
+
+            <div class="p-5 pt-0 border-t border-slate-100 dark:border-base-800">
+                <div class="flex flex-col lg:flex-row gap-6 mt-4">
+                    <div class="flex flex-col gap-5 grow">
+                        {% include "unfold/helpers/app_list_default.html" with show_changelinks=True %}
+                    </div>
+
+                    {% include "unfold/helpers/history.html" %}
+                </div>
+            </div>
+        </details>
+    </div>
+
+</div>
+{% endblock %}

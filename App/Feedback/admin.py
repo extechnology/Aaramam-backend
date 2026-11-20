@@ -4,6 +4,7 @@ from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import ChoicesDropdownFilter, RelatedDropdownFilter
 from unfold.decorators import action, display
 
+from App.common.export import GUEST_FEEDBACK_COLUMNS, export_to_csv, export_to_excel
 from .models import (
     FeedbackCategory,
     FeedbackStat,
@@ -219,7 +220,26 @@ class GuestFeedbackSubmissionAdmin(ModelAdmin):
     search_fields = ('name', 'email', 'phone_number', 'feedback', 'treatment_taken')
     readonly_fields = ('created_at',)
     ordering = ('-created_at',)
-    actions = ['approve_submissions']
+    actions_list = ['export_all_excel', 'export_all_csv']
+    actions = ['approve_submissions', 'export_selected_excel', 'export_selected_csv']
+
+    @action(description=_('Export to Excel (.xlsx)'), icon='file_download')
+    def export_all_excel(self, request):
+        qs = self.get_queryset(request)
+        return export_to_excel(qs, 'Aaramam_Guest_Submissions', 'Guest Submissions', GUEST_FEEDBACK_COLUMNS)
+
+    @action(description=_('Export to CSV (.csv)'), icon='download')
+    def export_all_csv(self, request):
+        qs = self.get_queryset(request)
+        return export_to_csv(qs, 'Aaramam_Guest_Submissions', GUEST_FEEDBACK_COLUMNS)
+
+    @action(description=_('Export selected to Excel (.xlsx)'))
+    def export_selected_excel(self, request, queryset):
+        return export_to_excel(queryset, 'Aaramam_Selected_Guest_Submissions', 'Selected Submissions', GUEST_FEEDBACK_COLUMNS)
+
+    @action(description=_('Export selected to CSV (.csv)'))
+    def export_selected_csv(self, request, queryset):
+        return export_to_csv(queryset, 'Aaramam_Selected_Guest_Submissions', GUEST_FEEDBACK_COLUMNS)
 
     @display(description=_('Guest'), header=True)
     def display_guest(self, instance: GuestFeedbackSubmission):

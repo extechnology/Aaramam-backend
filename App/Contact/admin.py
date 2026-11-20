@@ -3,8 +3,9 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import ChoicesDropdownFilter
-from unfold.decorators import display
+from unfold.decorators import action, display
 
+from App.common.export import ADMISSION_INQUIRY_COLUMNS, export_to_csv, export_to_excel
 from .models import AdmissionInquiry, SanctuaryContactInfo
 
 
@@ -80,6 +81,26 @@ class AdmissionInquiryAdmin(ModelAdmin):
     search_fields = ('name', 'phone_number', 'requirements_or_due_date', 'notes')
     readonly_fields = ('created_at', 'display_whatsapp_button')
     ordering = ('-created_at',)
+    actions_list = ['export_all_excel', 'export_all_csv']
+    actions = ['export_selected_excel', 'export_selected_csv']
+
+    @action(description=_('Export to Excel (.xlsx)'), icon='file_download')
+    def export_all_excel(self, request):
+        qs = self.get_queryset(request)
+        return export_to_excel(qs, 'Aaramam_Admission_Inquiries', 'Admission Inquiries', ADMISSION_INQUIRY_COLUMNS)
+
+    @action(description=_('Export to CSV (.csv)'), icon='download')
+    def export_all_csv(self, request):
+        qs = self.get_queryset(request)
+        return export_to_csv(qs, 'Aaramam_Admission_Inquiries', ADMISSION_INQUIRY_COLUMNS)
+
+    @action(description=_('Export selected to Excel (.xlsx)'))
+    def export_selected_excel(self, request, queryset):
+        return export_to_excel(queryset, 'Aaramam_Selected_Admission_Inquiries', 'Selected Inquiries', ADMISSION_INQUIRY_COLUMNS)
+
+    @action(description=_('Export selected to CSV (.csv)'))
+    def export_selected_csv(self, request, queryset):
+        return export_to_csv(queryset, 'Aaramam_Selected_Admission_Inquiries', ADMISSION_INQUIRY_COLUMNS)
 
     fieldsets = (
         (
