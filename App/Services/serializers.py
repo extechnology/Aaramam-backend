@@ -36,18 +36,22 @@ class ServiceAmenitySerializer(serializers.ModelSerializer):
     """
     Serializer for key highlights / amenities (left grid in detailed modal).
     """
+    icon_display = serializers.CharField(source='get_icon_display', read_only=True)
+
     class Meta:
         model = ServiceAmenity
-        fields = ('id', 'title', 'subtext', 'icon', 'order')
+        fields = ('id', 'title', 'subtext', 'icon', 'icon_display', 'order')
 
 
 class ServiceCarePillarSerializer(serializers.ModelSerializer):
     """
     Serializer for care pillars (right grid in detailed modal).
     """
+    icon_display = serializers.CharField(source='get_icon_display', read_only=True)
+
     class Meta:
         model = ServiceCarePillar
-        fields = ('id', 'title', 'subtext', 'icon', 'order')
+        fields = ('id', 'title', 'subtext', 'icon', 'icon_display', 'order')
 
 
 class ServiceInclusionSerializer(serializers.ModelSerializer):

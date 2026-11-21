@@ -6,6 +6,7 @@ from unfold.contrib.filters.admin import ChoicesDropdownFilter, RelatedDropdownF
 from unfold.decorators import action, display
 
 from App.common.export import SERVICE_INQUIRY_COLUMNS, export_to_csv, export_to_excel
+from App.common.widgets import PersistentInlinesMixin
 
 from .models import (
     Service,
@@ -86,7 +87,7 @@ class ServiceCategoryAdmin(ModelAdmin):
 
 
 @admin.register(Service)
-class ServiceAdmin(ModelAdmin):
+class ServiceAdmin(PersistentInlinesMixin, ModelAdmin):
     """
     Unfold Admin configuration for Service Packages & Detailed Modal.
     """

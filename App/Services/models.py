@@ -283,6 +283,65 @@ class ServiceTherapy(models.Model):
         return f"{self.service.title} - {self.name}"
 
 
+SANCTUARY_ICON_CHOICES = (
+    (_('Medical & Healthcare'), (
+        ('health_and_safety', '🛡️ Doctor Supervised / Health & Safety (health_and_safety)'),
+        ('stethoscope', '🩺 Doctor-Led Care / Stethoscope (stethoscope)'),
+        ('medical_services', '🏥 Clinical & Medical Services (medical_services)'),
+        ('healing', '🩹 Healing & Recovery (healing)'),
+        ('medication', '🌿 Ayurvedic Medicines & Herbals (medication)'),
+        ('monitor_heart', '💓 Vital Health Monitoring (monitor_heart)'),
+        ('emergency', '🚨 24/7 Medical & Emergency Support (emergency)'),
+        ('vaccines', '💉 Medical Treatments (vaccines)'),
+    )),
+    (_('Mother, Baby & Postnatal Nurture'), (
+        ('child_care', '👶 Mother & Baby Postnatal Care (child_care)'),
+        ('baby_changing_station', '🍼 Infant Care & Bath Station (baby_changing_station)'),
+        ('pregnant_woman', '🤰 Maternity & Prenatal Wellness (pregnant_woman)'),
+        ('family_restroom', '👨‍👩‍👧 Family & Bystander Stay (family_restroom)'),
+        ('favorite', '❤️ Loving Mother Care & Compassion (favorite)'),
+    )),
+    (_('Ayurvedic Therapies, Spa & Body'), (
+        ('spa', '🌸 Ayurvedic Spa & Rejuvenation (spa)'),
+        ('water_drop', '💧 Herbal Oils & Shirodhara Stream (water_drop)'),
+        ('hot_tub', '🛁 Herbal Bath & Steam / Vethukuzhi (hot_tub)'),
+        ('clean_hands', '👐 Abhyanga Therapeutic Massage (clean_hands)'),
+        ('self_improvement', '🧘 Meditation, Yoga & Mindful Rest (self_improvement)'),
+        ('local_florist', '🌺 Natural Botanicals & Herbal Kizhi (local_florist)'),
+        ('fitness_center', '💪 Physical Therapy & Rehabilitation (fitness_center)'),
+    )),
+    (_('Accommodation, Rooms & Comfort'), (
+        ('bed', '🛏️ Private AC Suite / Bed (bed)'),
+        ('hotel', '🏨 Inpatient Stay / Bystander Room (hotel)'),
+        ('king_bed', '👑 Deluxe Suite / Premium Room (king_bed)'),
+        ('bathtub', '🚿 Attached Hot Bath / Herbal Water (bathtub)'),
+        ('shower', '🚿 Attached Shower / Hot Water (shower)'),
+        ('ac_unit', '❄️ Air Conditioned Suite (ac_unit)'),
+        ('room_service', '🛎️ 24/7 Nursing & Room Service (room_service)'),
+        ('home', '🏡 Homely Sanctuary Atmosphere (home)'),
+        ('wifi', '📶 Complimentary High-Speed Wi-Fi (wifi)'),
+        ('local_parking', '🚗 Dedicated Guest Parking (local_parking)'),
+        ('security', '🔒 Safe & Protected Sanctuary (security)'),
+    )),
+    (_('Diet, Food & Nourishment'), (
+        ('restaurant', '🍲 Postpartum Diet / Pathya Ahara (restaurant)'),
+        ('restaurant_menu', '📜 Prescribed Ayurvedic Diet Menu (restaurant_menu)'),
+        ('local_dining', '🥗 Fresh Organic Balanced Meals (local_dining)'),
+        ('soup_kitchen', '🥣 Herbal Soups & Oushadha Kanji (soup_kitchen)'),
+        ('coffee', '☕ Herbal Decoctions & Warm Teas (coffee)'),
+    )),
+    (_('Trust, Heritage & Standards'), (
+        ('verified', '✅ Verified & Certified Care (verified)'),
+        ('shield', '🛡️ Safe & Protected Environment (shield)'),
+        ('award_star', '⭐ Generational Vaidya Heritage (award_star)'),
+        ('star', '🌟 Premium 5-Star Standards (star)'),
+        ('schedule', '⏰ 24/7 Round-the-Clock Observation (schedule)'),
+        ('eco', '🍃 100% Pure Natural Herbals (eco)'),
+        ('nature_people', '🌳 Tranquil Natural Green Sanctuary (nature_people)'),
+    )),
+)
+
+
 class ServiceAmenity(models.Model):
     """
     Left-hand 2x2 grid in detailed modal:
@@ -299,7 +358,13 @@ class ServiceAmenity(models.Model):
     )
     title = models.CharField(_('title'), max_length=100)
     subtext = models.CharField(_('subtext'), max_length=150)
-    icon = models.CharField(_('icon key'), max_length=50, blank=True, default='verified', help_text=_('Material icon key or identifier'))
+    icon = models.CharField(
+        _('icon key'),
+        max_length=60,
+        choices=SANCTUARY_ICON_CHOICES,
+        default='verified',
+        help_text=_('Select an icon from the list')
+    )
     order = models.PositiveIntegerField(_('order'), default=0)
 
     class Meta:
@@ -327,7 +392,13 @@ class ServiceCarePillar(models.Model):
     )
     title = models.CharField(_('title'), max_length=100)
     subtext = models.CharField(_('subtext'), max_length=150)
-    icon = models.CharField(_('icon key'), max_length=50, blank=True, default='spa', help_text=_('Material icon key or identifier'))
+    icon = models.CharField(
+        _('icon key'),
+        max_length=60,
+        choices=SANCTUARY_ICON_CHOICES,
+        default='spa',
+        help_text=_('Select an icon from the list')
+    )
     order = models.PositiveIntegerField(_('order'), default=0)
 
     class Meta:
