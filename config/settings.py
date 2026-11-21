@@ -27,7 +27,11 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-2_q1z8wl2=#j&245e4#1q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='server.aaramamcare.com,aaramamcare.com,www.aaramamcare.com,localhost,127.0.0.1,*',
+    cast=Csv()
+)
 
 
 # Application definition
@@ -142,6 +146,39 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://localhost:\d+$",
     r"^http://127\.0\.0\.1:\d+$",
 ]
+CORS_ALLOWED_ORIGINS = [
+    'https://server.aaramamcare.com',
+    'http://server.aaramamcare.com',
+    'https://aaramamcare.com',
+    'http://aaramamcare.com',
+    'https://www.aaramamcare.com',
+    'http://www.aaramamcare.com',
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
+]
+
+# CSRF Trusted Origins (Required for Django Admin & Forms under HTTPS/cPanel)
+CSRF_TRUSTED_ORIGINS = [
+    'https://server.aaramamcare.com',
+    'http://server.aaramamcare.com',
+    'https://aaramamcare.com',
+    'http://aaramamcare.com',
+    'https://www.aaramamcare.com',
+    'http://www.aaramamcare.com',
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:8000',
+]
+
+# Reverse Proxy SSL Header (for cPanel/Nginx HTTPS
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Base URL used in emails and notifications
+ADMIN_BASE_URL = config('ADMIN_BASE_URL', default='https://server.aaramamcare.com')
 
 
 # Email Configuration
